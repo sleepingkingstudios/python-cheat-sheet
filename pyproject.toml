@@ -2,6 +2,7 @@
 name = "anaconda"
 dependencies = [
     "flask >=3.0,<4",
+    "markdown >=3.6,<4",
 ]
 dynamic = ["version", "description"]
 
