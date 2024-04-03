@@ -21,7 +21,7 @@ class TestRenderMarkdown:
     def test_empty_template(self, with_app_context):
         rendered = render_markdown('mocks/empty_template.md')
 
-        assert type(rendered) == Markup
+        assert type(rendered) is Markup
         assert rendered == ''
 
     def test_markdown_template(self, with_app_context):
@@ -32,10 +32,10 @@ class TestRenderMarkdown:
         expected = cleandoc(
             """
             <h1>Greetings, Starfighter!</h1>
-            <p>You have been recruited by the Star League to defend the frontier against
-            Xur and the Ko-Dan Armada.</p>
+            <p>You have been recruited by the Star League to defend the
+            frontier against Xur and the Ko-Dan Armada.</p>
             """
         )
 
-        assert type(rendered) == Markup
+        assert type(rendered) is Markup
         assert rendered == expected

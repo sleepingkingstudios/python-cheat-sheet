@@ -30,3 +30,9 @@ A [Flask](https://flask.palletsprojects.com/en/3.0.x/) application.
     ```bash
     pytest
     ```
+
+5.  Run the code linter:
+
+    ```bash
+    pycodestyle anaconda
+    ```
