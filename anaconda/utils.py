@@ -4,7 +4,7 @@ from flask import render_template
 from markdown import markdown
 from markupsafe import Markup
 from bs4 import BeautifulSoup
-
+from bs4.element import PageElement, Tag
 
 __HEADING_TAGS__ = ['h1', 'h2', 'h3', 'h4', 'h5', 'g6']
 
@@ -56,6 +56,48 @@ def __add_header_ids__(fragment: BeautifulSoup) -> BeautifulSoup:
             tag.attrs['id'] = __kebab_case_word__(tag.text)
 
     return fragment
+
+
+def __get_parent_children__(headings: list, heading_level: int) -> list:
+    children = headings
+
+    for _ in range(1, heading_level):
+        if len(children) == 0:
+            return children
+
+        children = children[-1]['children']
+
+    return children
+
+
+def __parse_heading_tag__(element: PageElement) -> bool:
+    if not isinstance(element, Tag):
+        return False
+
+    if element.name == 'h1':
+        return False
+
+    return element.name in __HEADING_TAGS__
+
+
+def parse_headings(fragment: BeautifulSoup) -> list:
+    headings = []
+
+    for element in fragment.children:
+        if not __parse_heading_tag__(element):
+            continue
+
+        # Only generate headings for h2-h6 tags.
+        heading_level = __HEADING_TAGS__.index(element.name)
+        heading = {
+            'label': element.text,
+            'url': f"#{element.attrs['id']}",
+            'children': []
+        }
+        children = __get_parent_children__(headings, heading_level)
+        children.append(heading)
+
+    return headings
 
 
 def render_markdown(template_name: str, **context: Any) -> Markup:
