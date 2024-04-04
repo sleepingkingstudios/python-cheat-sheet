@@ -1,0 +1,11 @@
+{% extends "layout.html" %}
+
+{% block navigation %}
+{{ render_template("page/navigation.html", navigation=navigation) }}
+{% endblock %}
+
+{% block content %}
+<article class="prose">
+  {{ content }}
+</article>
+{% endblock %}

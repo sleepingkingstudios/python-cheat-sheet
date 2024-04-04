@@ -5,7 +5,12 @@ from markupsafe import Markup
 from bs4 import BeautifulSoup
 
 from anaconda import application
-from anaconda.utils import kebab_case, parse_headings, render_markdown
+from anaconda.utils import (
+    kebab_case,
+    parse_headings,
+    parse_markdown,
+    render_markdown,
+)
 
 
 @pytest.fixture
@@ -148,6 +153,34 @@ class TestParseHeadings:
         ]
 
         assert parse_headings(fragment) == expected
+
+
+class TestParseMarkdown:
+    def test_invalid_template(self, with_app_context):
+        with pytest.raises(TemplateNotFound):
+            parse_markdown('invalid_template.md')
+
+    def test_empty_template(self, with_app_context):
+        fragment = parse_markdown('mocks/empty_template.md')
+
+        assert type(fragment) is BeautifulSoup
+        assert str(fragment) == ''
+
+    def test_markdown_template(self, with_app_context):
+        fragment = parse_markdown(
+            'mocks/markdown_template.md',
+            name='Starfighter'
+        )
+        expected = cleandoc(
+            """
+            <h1 id="greetings-starfighter">Greetings, Starfighter!</h1>
+            <p>You have been recruited by the Star League to defend the
+            frontier against Xur and the Ko-Dan Armada.</p>
+            """
+        )
+
+        assert type(fragment) is BeautifulSoup
+        assert str(fragment) == expected
 
 
 class TestRenderMarkdown:

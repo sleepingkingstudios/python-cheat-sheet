@@ -1,0 +1,7 @@
+<nav>
+  <ul class="flex flex-col overflow-hidden">
+    {% for item in navigation %}
+    {{ render_template("page/navigation_item.html", item=item) }}
+    {% endfor %}
+  </ul>
+</nav>
