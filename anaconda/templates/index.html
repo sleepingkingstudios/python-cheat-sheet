@@ -2,8 +2,6 @@
 
 {% block content %}
 <article class="prose">
-  <h1>Python Cheat Sheet</h1>
-
-  <p>Greetings, starfighter!</p>
+  {{ render_markdown("index.md", name="Programs") }}
 </article>
 {% endblock %}
