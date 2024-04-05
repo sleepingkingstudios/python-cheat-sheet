@@ -47,16 +47,51 @@ Python prefers 4 spaces per tab, with a maximum line length of 79 (for code) and
 
 A program is structured as a [module](#modules) with a defined `main()` function. When a Python file is run directly, the special variable `__name__` is set to `"__main__"`. Therefore, it's common to have the boilerplate `if __name__ ==` to call a `main()` function when the module is run directly, but not when the module is imported by some other module.
 
-<pre><code>def main():
+```python
+def main():
     print('Greetings, programs!')
 
 
 if __name_ == '__main__':
     main()
-</code></pre>
+```
 
 A few specific reminders:
 
 - Do not use whitespace inside brackets: `{eggs: 2}` instead of `{ eggs: 2 }`.
 - Do not use spaces around `=` for function parameters or keyword arguments.
 - Be consistent with function `return`s. If a function returns a value in one branch, it should return a value in all branches, using `return None`, rather than a bare `return`.
+
+### Naming
+
+Module names (and therefore file names) should be in snake_case, e.g. `example_module.py`.
+
+Constant and variable names **must** be a combination of upper-case (`A-Z`) and lower-case (`a-z`) letters, digits (`0-9`), and underscores (`_`), and **must not** start with a digit. Variable names are case-sensitive.
+
+Variables and functions should use `snake_case`.
+
+```python
+user_name = 'Alan Bradley'
+
+def full_name(first_name, last_name):
+    pass
+```
+
+Constants should use `UPPER_SNAKE_CASE`.
+
+```python
+DEFAULT_GREETING = 'Greetings, programs!'
+```
+
+By convention, private variable, function, and constant names should be wrapped in double underscores.
+
+```python
+__private_variable__ = 'secret'
+
+__PRIVATE_CONSTANT__ = '12345'
+
+def __private_function__():
+    pass
+```
+
+Private module functions may be prefixed by one or two underscores. Class protected variables and methods can be prefixed with one underscore. Private class variables and methods are prefixed with two underscores, and protected via name mangling. Finally, "magic" or "dunder" class methods (such as the constructor method `__init__`) will also be wrapped in double underscores.
