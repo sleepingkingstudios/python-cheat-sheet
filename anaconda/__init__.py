@@ -12,4 +12,4 @@ __version__ = '0.1.0'
 application = Flask(__name__)
 
 
-import anaconda.views  # nopep8: E721
+import anaconda.views  # noqa: F401, E402

@@ -2,7 +2,11 @@ from flask import render_template
 from markupsafe import Markup
 
 from anaconda import application
-from anaconda.utils import parse_headings, parse_markdown, render_markdown
+from anaconda.utils.html_utils import parse_headings
+from anaconda.utils.render_utils import (
+    parse_markdown,
+    render_markdown,
+)
 
 
 @application.context_processor

@@ -1,4 +1,4 @@
-import pytest
+import pytest  # noqa: F401
 
 from anaconda.utils.string_utils import kebab_case
 

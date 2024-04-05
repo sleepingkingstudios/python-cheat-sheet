@@ -1,4 +1,4 @@
-import pytest
+import pytest  # noqa: F401
 from inspect import cleandoc
 from bs4 import BeautifulSoup
 
