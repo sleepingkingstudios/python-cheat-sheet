@@ -1,45 +1,99 @@
-import pytest
+import pytest  # noqa: F401
 from inspect import cleandoc
-from jinja2 import TemplateNotFound
-from markupsafe import Markup
 from bs4 import BeautifulSoup
 
-from anaconda import application
-from anaconda.utils import (
-    kebab_case,
+from anaconda.utils.html_utils import (
+    add_header_ids,
     parse_headings,
-    parse_markdown,
-    render_markdown,
 )
 
 
-@pytest.fixture
-def with_app_context():
-    with application.app_context():
-        yield
+class TestAddHeaderIds:
+    def test_empty_fragment(self):
+        fragment = BeautifulSoup('')
+        processed = add_header_ids(fragment)
 
+        assert str(processed) == ''
 
-class TestKebabCase:
-    def test_empty_string(self):
-        assert kebab_case('') == ''
+    def test_html_with_flat_headings(self):
+        raw_html = cleandoc(
+            """
+            <h1>Top Heading</h1>
 
-    def test_lowercase_string(self):
-        assert kebab_case('lowercase') == 'lowercase'
+            <p>Introductory paragraph.</p>
 
-    def test_capitalized_string(self):
-        assert kebab_case('Capitalized') == 'capitalized'
+            <h2>Middle Heading</h2>
 
-    def test_camel_case_string(self):
-        assert kebab_case('CamelCase') == 'camel-case'
+            <p>Middle paragraph.</p>
 
-    def test_kebab_case_string(self):
-        assert kebab_case('kebab-case') == 'kebab-case'
+            <h2>Final Heading</h2>
 
-    def test_snake_case_string(self):
-        assert kebab_case('snake_case') == 'snake-case'
+            <p>Final paragraph.</p>
+            """
+        )
+        fragment = BeautifulSoup(raw_html, features="html.parser")
+        processed = add_header_ids(fragment)
+        expected = cleandoc(
+            """
+            <h1 id="top-heading">Top Heading</h1>
+            <p>Introductory paragraph.</p>
+            <h2 id="middle-heading">Middle Heading</h2>
+            <p>Middle paragraph.</p>
+            <h2 id="final-heading">Final Heading</h2>
+            <p>Final paragraph.</p>
+            """
+        )
 
-    def test_string_with_punctuation(self):
-        assert kebab_case('Greetings, Programs!') == 'greetings-programs'
+        assert str(processed) == expected
+
+    def test_html_with_nested_headings(self):
+        raw_html = cleandoc(
+            """
+            <h1>Top Heading</h1>
+
+            <p>Introductory paragraph.</p>
+
+            <h2>Middle Heading</h2>
+
+            <p>Middle paragraph.</p>
+
+            <h3>Inner Heading</h3>
+
+            <p>Inner paragraph.</p>
+
+            <h3>Another Inner Heading</h3>
+
+            <p>Another inner paragraph.</p>
+
+            <h4>Nested Heading</h4>
+
+            <p>Nested paragraph.</p>
+
+            <h2>Final Heading</h2>
+
+            <p>Final paragraph.</p>
+            """
+        )
+        fragment = BeautifulSoup(raw_html, features="html.parser")
+        processed = add_header_ids(fragment)
+        expected = cleandoc(
+            """
+            <h1 id="top-heading">Top Heading</h1>
+            <p>Introductory paragraph.</p>
+            <h2 id="middle-heading">Middle Heading</h2>
+            <p>Middle paragraph.</p>
+            <h3 id="inner-heading">Inner Heading</h3>
+            <p>Inner paragraph.</p>
+            <h3 id="another-inner-heading">Another Inner Heading</h3>
+            <p>Another inner paragraph.</p>
+            <h4 id="nested-heading">Nested Heading</h4>
+            <p>Nested paragraph.</p>
+            <h2 id="final-heading">Final Heading</h2>
+            <p>Final paragraph.</p>
+            """
+        )
+
+        assert str(processed) == expected
 
 
 class TestParseHeadings:
@@ -153,59 +207,3 @@ class TestParseHeadings:
         ]
 
         assert parse_headings(fragment) == expected
-
-
-class TestParseMarkdown:
-    def test_invalid_template(self, with_app_context):
-        with pytest.raises(TemplateNotFound):
-            parse_markdown('invalid_template.md')
-
-    def test_empty_template(self, with_app_context):
-        fragment = parse_markdown('mocks/empty_template.md')
-
-        assert type(fragment) is BeautifulSoup
-        assert str(fragment) == ''
-
-    def test_markdown_template(self, with_app_context):
-        fragment = parse_markdown(
-            'mocks/markdown_template.md',
-            name='Starfighter'
-        )
-        expected = cleandoc(
-            """
-            <h1 id="greetings-starfighter">Greetings, Starfighter!</h1>
-            <p>You have been recruited by the Star League to defend the
-            frontier against Xur and the Ko-Dan Armada.</p>
-            """
-        )
-
-        assert type(fragment) is BeautifulSoup
-        assert str(fragment) == expected
-
-
-class TestRenderMarkdown:
-    def test_invalid_template(self, with_app_context):
-        with pytest.raises(TemplateNotFound):
-            render_markdown('invalid_template.md')
-
-    def test_empty_template(self, with_app_context):
-        rendered = render_markdown('mocks/empty_template.md')
-
-        assert type(rendered) is Markup
-        assert rendered == ''
-
-    def test_markdown_template(self, with_app_context):
-        rendered = render_markdown(
-            'mocks/markdown_template.md',
-            name='Starfighter'
-        )
-        expected = cleandoc(
-            """
-            <h1 id="greetings-starfighter">Greetings, Starfighter!</h1>
-            <p>You have been recruited by the Star League to defend the
-            frontier against Xur and the Ko-Dan Armada.</p>
-            """
-        )
-
-        assert type(rendered) is Markup
-        assert rendered == expected
