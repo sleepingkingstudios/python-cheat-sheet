@@ -5,6 +5,13 @@ from markdown import markdown
 from markupsafe import Markup
 
 from anaconda.utils.html_utils import add_header_ids
+from anaconda.utils.markdown_utils import process_fenced_code_blocks
+
+
+def _pre_process_markdown(document: str) -> str:
+    document = process_fenced_code_blocks(document)
+
+    return document
 
 
 def _post_process_markdown(fragment: BeautifulSoup) -> BeautifulSoup:
@@ -25,7 +32,8 @@ def parse_markdown(template_name: str, **context: Any) -> BeautifulSoup:
         BeautifulSoup: The intermediate HTML representation.
     """
     raw_text = render_template(template_name, **context)
-    rendered = markdown(raw_text)
+    processed = _pre_process_markdown(raw_text)
+    rendered = markdown(processed)
     fragment = BeautifulSoup(rendered, features="html.parser")
     fragment = _post_process_markdown(fragment)
 
