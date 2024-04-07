@@ -1,4 +1,4 @@
-# Python Reference Sheet
+# Overview
 
 ## Command Line
 
@@ -43,7 +43,7 @@ The `pycodestyle` module can lint a python file from the command line.
   <dd>`pycodestyle path/to/directory</dd>
 </dl>
 
-Python prefers 4 spaces per tab, with a maximum line length of 79 (for code) and 72 (for [docstrings](#docstrings)).
+Python prefers 4 spaces per tab, with a maximum line length of 79 (for code) and 72 (for <a href="{{ url_for('syntax') }}#docstrings">docstrings</a>).
 
 Surround top-level function and class definitions with two blank lines. Method definitions inside a class are surrounded by a single blank line.
 
@@ -146,6 +146,13 @@ from ..auncle_module import auncle_function
 
 from ..auncle_module import cousin_module
 from ..auncle_module.cousin_module import cousin_function
+```
+
+Imports can also be aliased using the `as` keyword.
+
+```python
+import random as rand
+from random import randint as random_integer, choice as pick
 ```
 
 ### Builtin Modules

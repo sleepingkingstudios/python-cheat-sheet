@@ -18,6 +18,16 @@ def template_processor():
     return dict(render_template=unsafe_render_template)
 
 
-@application.route('/')
+@application.get('/')
 def index():
-    return render_page('index.md')
+    return render_page('overview.md')
+
+
+@application.get('/functions')
+def functions():
+    return render_page('functions.md')
+
+
+@application.get('/syntax')
+def syntax():
+    return render_page('syntax.md')
