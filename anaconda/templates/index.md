@@ -45,26 +45,18 @@ The `pycodestyle` module can lint a python file from the command line.
 
 Python prefers 4 spaces per tab, with a maximum line length of 79 (for code) and 72 (for [docstrings](#docstrings)).
 
-A program is structured as a [module](#modules) with a defined `main()` function. When a Python file is run directly, the special variable `__name__` is set to `"__main__"`. Therefore, it's common to have the boilerplate `if __name__ ==` to call a `main()` function when the module is run directly, but not when the module is imported by some other module.
-
-```python
-def main():
-    print('Greetings, programs!')
-
-
-if __name_ == '__main__':
-    main()
-```
+Surround top-level function and class definitions with two blank lines. Method definitions inside a class are surrounded by a single blank line.
 
 A few specific reminders:
 
+- Inline comments should be preceded by two spaces: `foo = "bar"  # Assigns foo`.
 - Do not use whitespace inside brackets: `{eggs: 2}` instead of `{ eggs: 2 }`.
 - Do not use spaces around `=` for function parameters or keyword arguments.
 - Be consistent with function `return`s. If a function returns a value in one branch, it should return a value in all branches, using `return None`, rather than a bare `return`.
 
 ### Naming
 
-Module names (and therefore file names) should be in snake_case, e.g. `example_module.py`.
+Module names (and therefore file names) should be in `snake_case`, e.g. `example_module.py`.
 
 Constant and variable names **must** be a combination of upper-case (`A-Z`) and lower-case (`a-z`) letters, digits (`0-9`), and underscores (`_`), and **must not** start with a digit. Variable names are case-sensitive.
 
@@ -94,4 +86,131 @@ def __private_function__():
     pass
 ```
 
-Private module functions may be prefixed by one or two underscores. Class protected variables and methods can be prefixed with one underscore. Private class variables and methods are prefixed with two underscores, and protected via name mangling. Finally, "magic" or "dunder" class methods (such as the constructor method `__init__`) will also be wrapped in double underscores.
+Private module functions may be prefixed by one or two underscores. Class protected variables and methods can be prefixed with one underscore. Private class variables and methods are prefixed with two underscores, and protected via name mangling. Finally, "magic" or "dunder" class methods (such as the constructor method `__init__`) must be wrapped in double underscores.
+
+## Program Structure
+
+Each Python file defines a module and can contain both definitions and statements, such as variables, functions, and classes. Modules can be imported and used in other Python files using the `import` statement.
+
+When the file is run directly (as opposed to being imported by another file), the value of the `__name__` variable is set to `"__main__"`. By convention, executable Python files define a `main()` function, which is executed only `if __name__ == "__main__"`.
+
+```python
+def main():
+    print('Greetings, programs!')
+
+
+if __name_ == '__main__':
+    main()
+```
+
+### Imports
+
+Python code is shared between files using the `import` keyword. Using a bare `import` adds the module to the local scope by name.
+
+```python
+import math
+
+math.ceil(0.5)  # returns 1
+math.floor(0.5)  # returns 0
+```
+
+To import specific definitions from a module, use the `from`...`import` syntax. This adds the definitions to the local scope directly.
+
+```python
+from math import ceil, floor
+
+ceil(0.5)  # returns 1
+floor(0.5)  # returns 0
+```
+
+Long import statements can be broken up using parentheses.
+
+```python
+from my_package.my_namespace.my_custom_module import (
+    my_method_with_long_name,
+    my_variable_with_long_name,
+)
+```
+
+By default, imports are absolute, i.e. relative to the top-level directory. Python also supports relative imports (using the `from`...`import` syntax) only. A single leading dot indicates a relative import, starting with the current package. Two or more leading dots indicate a relative import to the parent(s) of the current package, one level per dot after the first.
+
+```python
+from . import sibling_module
+from .sibling_module import sibling_function
+
+from .sibling_module import nibling_module
+from .sibling_module.nibling_module import nibling_function
+
+from .. import auncle_module
+from ..auncle_module import auncle_function
+
+from ..auncle_module import cousin_module
+from ..auncle_module.cousin_module import cousin_function
+```
+
+### Builtin Modules
+
+Python also defines a set of builtin modules as part of the <a href="https://docs.python.org/3/library/" target="_blank">Python Standard Library</a>. These include:
+
+- <a href="https://docs.python.org/3/library/copy.html" target="_blank">copy</a>: Shallow and deep copy operations.
+- <a href="https://docs.python.org/3/library/math.html" target="_blank">math</a>: Mathematical functions.
+- <a href="https://docs.python.org/3/library/random.html" target="_blank">random</a>: Generate pseudo-random numbers.
+- <a href="https://docs.python.org/3/library/re.html" target="_blank">re</a>: Regular expression operations.
+
+Builtin modules can be imported by name.
+
+```python
+import copy
+from math import ceil, floor
+```
+
+### Packages
+
+Python uses packages to group modules together into a single namespace. Each package is defined by a directory with an `__init__.py` file, which serves as the entry point for the package. (The `__init__.py` file is required for Python to treat the directory as a package, but can be empty.) Packages can also be nested inside one another.
+
+```
+magic/
+    __init__.py
+    mana.py
+    schools.py
+    potions/
+        __init.py
+        potion_of_healing.py
+    spells/
+        __init__.py
+        magic_missile.py
+```
+
+Packages can be imported by Python files. The dot `.` character is used to import from modules within a package (or a nested package); otherwise, the contents of `__init__.py` for that package are imported.
+
+```python
+import magic  # imports from magic/__init__.py
+
+import magic.schools  # imports from magic/schools.py
+
+import magic.potions  # imports from magic/potions/__init__.py
+
+import magic.potions.potion_of_healing  # imports from magic/potions/potion_of_healing.py
+```
+
+Packages can also be imported using the `import`...`from` syntax.
+
+```python
+# Imports potion_of_healing from magic/potions/__init__.py
+from magic.potions import potion_of_healing
+```
+
+### Package Managers
+
+Python also has support for external packages from sources such as the <a href="https://pypi.org/" target="_blank">Python Package Index</a>. Python uses `pip` to install packages.
+
+<dl>
+  <dt>Install A Package</dt>
+  <dd><code>python3 -m pip install pygments</code></dd>
+
+  <dt>Install A Package In A Virtual Environment</dt>
+  <dd><code>pip install pygments</code></dd>
+
+  <dt>Update A Package</dt>
+  <dd><code>python3 -m pip install -U pygments</code></dd>
+</dl>
