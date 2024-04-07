@@ -20,7 +20,7 @@ module provides Python support for lightweight "virtual environments", which all
 
 <dl>
   <dt>Create A Virtual Environment</dt>
-  <dd><code>python3 -m venv /path/to/new/virtual/environment</code></dd>
+  <dd><code>python3 -m venv .venv</code></dd>
 
   <dt>Activate A Virtual Environment</dt>
   <dd><code>. .venv/bin/activate</code></dd>
@@ -202,13 +202,10 @@ from magic.potions import potion_of_healing
 
 ### Package Managers
 
-Python also has support for external packages from sources such as the <a href="https://pypi.org/" target="_blank">Python Package Index</a>. Python uses `pip` to install packages.
+Python also has support for external packages from sources such as the <a href="https://pypi.org/" target="_blank">Python Package Index</a>. Python uses `pip` to install packages within a [Virtual Environment](#virtual-environments), or `brew` (on macOS) to install packages globally.
 
 <dl>
   <dt>Install A Package</dt>
-  <dd><code>python3 -m pip install pygments</code></dd>
-
-  <dt>Install A Package In A Virtual Environment</dt>
   <dd><code>pip install pygments</code></dd>
 
   <dt>Update A Package</dt>

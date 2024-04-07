@@ -1,10 +1,10 @@
 from typing import Any
 from bs4 import BeautifulSoup
-from flask import render_template
+import flask
 from markdown import markdown
 from markupsafe import Markup
 
-from anaconda.utils.html_utils import add_header_ids
+from anaconda.utils.html_utils import add_header_ids, parse_headings
 from anaconda.utils.markdown_utils import process_fenced_code_blocks
 
 
@@ -31,7 +31,7 @@ def parse_markdown(template_name: str, **context: Any) -> BeautifulSoup:
     Returns:
         BeautifulSoup: The intermediate HTML representation.
     """
-    raw_text = render_template(template_name, **context)
+    raw_text = flask.render_template(template_name, **context)
     processed = _pre_process_markdown(raw_text)
     rendered = markdown(processed)
     fragment = BeautifulSoup(rendered, features="html.parser")
@@ -52,3 +52,17 @@ def render_markdown(template_name: str, **context: Any) -> Markup:
         Markup: The generated HTML.
     """
     return Markup(parse_markdown(template_name, **context))
+
+
+def render_page(template_name: str, **context: Any) -> str:
+    fragment = parse_markdown(template_name, **context)
+    navigation = flask.render_template(
+        'page/navigation.html',
+        navigation=parse_headings(fragment)
+    )
+
+    return flask.render_template(
+        'page.html',
+        content=Markup(fragment),
+        navigation=Markup(navigation)
+    )

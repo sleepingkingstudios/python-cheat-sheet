@@ -2,11 +2,7 @@ from flask import render_template
 from markupsafe import Markup
 
 from anaconda import application
-from anaconda.utils.html_utils import parse_headings
-from anaconda.utils.render_utils import (
-    parse_markdown,
-    render_markdown,
-)
+from anaconda.utils.render_utils import render_markdown, render_page
 
 
 @application.context_processor
@@ -24,12 +20,4 @@ def template_processor():
 
 @application.route('/')
 def index():
-    fragment = parse_markdown("index.md", name="Programs")
-    navigation = parse_headings(fragment)
-    content = Markup(fragment)
-
-    return render_template(
-        'page.html',
-        content=content,
-        navigation=navigation
-    )
+    return render_page('index.md')
