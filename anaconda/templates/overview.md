@@ -218,3 +218,76 @@ Python also has support for external packages from sources such as the <a href="
   <dt>Update A Package</dt>
   <dd><code>python3 -m pip install -U pygments</code></dd>
 </dl>
+
+## Reflection
+
+Python has a number of ways to reflect on a class, module, function, or object.
+
+The `dir` method lists the properties defined for a module. The module must be `import`ed first, or a `NameError` will be raised.
+
+```python
+import re
+dir(re)
+# ['A', 'ASCII', 'DEBUG', 'DOTALL', 'I', 'IGNORECASE', 'L', 'LOCALE', 'M', ...]
+```
+
+The `help` method displays the documentation for a module, function or object:
+
+```python
+help(1)
+# Help on int object:
+#
+# class int(object)
+# ...
+```
+
+The documentation can also be accessed in raw form as the `__doc__` property.
+
+The `__name__` property returns the name of a class, module, or function.
+
+```python
+def add(a, b):
+    return a + b
+
+
+add.__name__
+# add
+```
+
+## Debugging
+
+Python has a built-in debugger.
+
+```python
+import pdb
+
+
+def run_debugger():
+    value = 'a string'
+
+    pdb.set_trace()
+
+    return value.upper()
+
+
+print(run_debugger())
+```
+
+The debugger will print the location of the `set_trace()` call as well as the *next* line of code (ignoring empty lines) and start a REPL. Any values that are in scope will be available to the debugger:
+
+```
+> python3 example_file.py
+-> return value.upper()
+(pdb) value
+'a string'
+(pdb) c
+A STRING
+```
+
+Common PDB commands include:
+
+- `l` or `list`: prints the lines surrounding the `set_trace()` call.
+- `n` or `next`: steps to the next line.
+- `p` or `print`: same as the built-in `print()` function.
+- `c` or `continue`: exits the debugger.
+
