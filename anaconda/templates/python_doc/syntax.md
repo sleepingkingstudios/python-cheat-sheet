@@ -263,7 +263,7 @@ list(iterable)  # [1, 1]
 ## Generators
 
 Generators are a type of [iterator](#iterators). Generators can be defined either using a
-<a href="{{url_for('functions')}}#generator-functions">generator function</a>
+<a href="{{url_for('python_doc.functions')}}#generator-functions">generator function</a>
 or a generator expression.
 
 A generator expression looks like a list comprehension, but uses parentheses instead of square brackets. It is equivalent to a lazy list comprehension, but without the memory overhead of creating the list. Generator expressions are particularly useful for passing to functions.

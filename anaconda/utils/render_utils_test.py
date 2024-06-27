@@ -7,7 +7,7 @@ from flask import render_template
 from jinja2 import Environment, TemplateNotFound
 from markupsafe import Markup
 
-from anaconda import application
+from anaconda import create_app
 from anaconda.utils.render_utils import (
     parse_markdown,
     render_markdown,
@@ -70,7 +70,7 @@ def _mock_render_template(template_name: str, **context: Any) -> str:
 
 @pytest.fixture
 def with_app_context():
-    with application.app_context():
+    with create_app().app_context():
         yield
 
 

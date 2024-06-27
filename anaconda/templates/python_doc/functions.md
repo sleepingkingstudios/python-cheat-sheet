@@ -156,7 +156,7 @@ closure()  # Returns 1
 
 ## Documenting Functions
 
-The first line of a function can be a [documentation string]({{url_for('syntax')}}/#docstrings) that describes what the function does.
+The first line of a function can be a [documentation string]({{url_for('python_doc.syntax')}}/#docstrings) that describes what the function does.
 
 ```python
 def greet():
@@ -187,7 +187,7 @@ Unlike functions, lambdas cannot be multi-line expressions and always return the
 
 ## Generator Functions
 
-Generator functions are a type of [generator]({{url_for('syntax')}}#generators). Generator functions have the following differences from a regular function:
+Generator functions are a type of [generator]({{url_for('python_doc.syntax')}}#generators). Generator functions have the following differences from a regular function:
 
 - Instead of using `return`, generator functions use `yield`.
 - While a regular function returns once, a generator function can yield multiple times.

@@ -34,5 +34,5 @@ A [Flask](https://flask.palletsprojects.com/en/3.0.x/) application.
 5.  Run the code linter:
 
     ```bash
-    pycodestyle anaconda
+    flake8 anaconda
     ```
