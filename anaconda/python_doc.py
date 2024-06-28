@@ -11,6 +11,11 @@ def index():
     return render_page('python_doc/overview.md')
 
 
+@blueprint.get('/flask')
+def flask():
+    return render_page('python_doc/flask.md')
+
+
 @blueprint.get('/functions')
 def functions():
     return render_page('python_doc/functions.md')

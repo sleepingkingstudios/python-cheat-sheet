@@ -219,6 +219,41 @@ Python also has support for external packages from sources such as the <a href="
   <dd><code>python3 -m pip install -U pygments</code></dd>
 </dl>
 
+### Configuration Files
+
+Python projects use a `pyproject.toml` configuration file to configure tools such as linters and build tools. See [Writing your pyproject.toml](https://packaging.python.org/en/latest/guides/writing-pyproject-toml/).
+
+The `[project]` table defines metadata for the project, including dependencies:
+
+```
+[project]
+name = "anaconda"
+dependencies = [
+    "flask >=3.0,<4",
+    "beautifulsoup4 >=4.12,<5",
+    "markdown >=3.6,<4",
+    "pygments >2.17,<3",
+]
+```
+
+Optional dependencies can be specified using the `[project.optional-dependencies]` table:
+
+```
+[project.optional-dependencies]
+test = [
+    "flake8 >=7,<8",
+    "pytest >=8.1,<9",
+]
+```
+
+For projects with a build tool, the `[build-system]` table specifies and configures the build tool:
+
+```
+[build-system]
+requires = ["flit_core<4"]
+build-backend = "flit_core.buildapi"
+```
+
 ## Reflection
 
 Python has a number of ways to reflect on a class, module, function, or object.
